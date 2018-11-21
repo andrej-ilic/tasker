@@ -1,0 +1,21 @@
+#passwordLengthMessage {
+  transition: opacity .4s linear;
+}
+
+.flicker {
+  animation-name: flicker;
+  animation-duration: .3s;
+  animation-iteration-count: 5;
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
