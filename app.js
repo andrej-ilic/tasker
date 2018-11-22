@@ -4,8 +4,16 @@ const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
 
 const app = express();
+
+// Loading routes
+const index = require('./routes/index');
+const users = require('./routes/users');
+
+// Passport configuration
+require('./config/passport')(passport);
 
 // Middleware
 app.use(bodyParser.json());
@@ -22,6 +30,9 @@ app.use(session({
   saveUninitialized: true
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(flash());
 
 app.use((req, res, next) => {
@@ -30,10 +41,6 @@ app.use((req, res, next) => {
   res.locals.user = req.user || null;
   next();
 });
-
-// Loading routes
-const index = require('./routes/index');
-const users = require('./routes/users');
 
 // Setting routes
 app.use('/', index);

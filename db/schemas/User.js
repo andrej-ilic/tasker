@@ -43,8 +43,21 @@ class UserSchema {
     );
   }
 
+  getUserById(id, callback) {
+    this.db.get(`SELECT * FROM users WHERE id = ?`, [id],
+      function(err, row) {
+        if (err) throw err;
+        callback(row);
+      }
+    );
+  }
+
   setPersonalGroupId(userId, personalGroupId) {
     this.db.run(`UPDATE users SET personalGroupId = ? WHERE id = ?`, [personalGroupId, userId]);
+  }
+
+  deleteUser(userId) {
+    this.db.run(`DELETE FROM users WHERE id = ?`, [userId]);
   }
 }
 

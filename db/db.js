@@ -8,4 +8,8 @@ const db = new sqlite3.Database('./db/tasker.sqlite3', (err) => {
   }
 });
 
+db.serialize(() => {
+  db.run(`PRAGMA foreign_keys = ON`, []);
+});
+
 module.exports = db;

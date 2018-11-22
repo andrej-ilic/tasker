@@ -7,7 +7,7 @@ function checkPasswordMatch() {
     message.classList.remove('text-danger');
     message.classList.add('text-success');
   } else {
-    message.innerHTML = '(passwords dont match)';
+    message.innerHTML = '(passwords don\'t match)';
     message.classList.add('text-danger');
     message.classList.remove('text-success');
   }
