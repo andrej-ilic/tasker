@@ -22,7 +22,7 @@ class UserGroupSchema {
     this.db.run(`INSERT INTO users_groups (userId, groupId) VALUES (?, ?)`, [userId, groupId],
       function(err) {
         if (err) throw err;
-        callback(this.lastID);
+        if (callback) callback(this.lastID);
       }
     );
   }

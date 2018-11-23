@@ -14,7 +14,8 @@ class UserSchema {
         personalGroupId INTEGER,
         name TEXT,
         username TEXT,
-        hash TEXT
+        hash TEXT,
+        biography TEXT DEFAULT ''
       )
     `, []);
   }
@@ -29,7 +30,7 @@ class UserSchema {
             const User = require('./User');
             User.setPersonalGroupId(userData.id, personalGroupId);
           });
-        callback(this.lastID);
+          if (callback) callback(this.lastID);
       }
     );
   }
@@ -38,7 +39,7 @@ class UserSchema {
     this.db.get(`SELECT * FROM users WHERE username = ?`, [username],
       function(err, row) {
         if (err) throw err;
-        callback(row);
+        if (callback) callback(row);
       }
     );
   }
@@ -47,7 +48,16 @@ class UserSchema {
     this.db.get(`SELECT * FROM users WHERE id = ?`, [id],
       function(err, row) {
         if (err) throw err;
-        callback(row);
+        if (callback) callback(row);
+      }
+    );
+  }
+
+  setBiography(id, biography, callback) {
+    this.db.run(`UPDATE users SET biography = ? WHERE id = ?`, [biography, id],
+      function(err) {
+        if (err) throw err;
+        if (callback) callback(this.lastID);
       }
     );
   }

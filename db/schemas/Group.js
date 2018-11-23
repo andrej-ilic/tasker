@@ -19,7 +19,7 @@ class GroupSchema {
     this.db.run(`INSERT INTO groups(name) VALUES(?)`, [name],
       function(err) {
         if (err) throw err;
-        callback(this.lastID);
+        if (callback) callback(this.lastID);
       }
     );
   }

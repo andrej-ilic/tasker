@@ -1,0 +1,7 @@
+<form id="addBioForm">
+  <div class="form-group">
+    <textarea id="biography" name="biography" placeholder="Add a bio" class="form-control">{{#if user.biography}}{{user.biography}}{{/if}}</textarea>
+  </div>
+  <a href="/users/me" class="btn btn-success btn-sm" onclick="updateBio()">Save</a>
+  <a href="#" class="btn btn-secondary btn-sm" onclick="addBioCancel()">Cancel</a>
+</form>

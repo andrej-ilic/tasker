@@ -11,6 +11,7 @@ const app = express();
 // Loading routes
 const index = require('./routes/index');
 const users = require('./routes/users');
+const tasks = require('./routes/tasks');
 
 // Passport configuration
 require('./config/passport')(passport);
@@ -38,6 +39,7 @@ app.use(flash());
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
   res.locals.user = req.user || null;
   next();
 });
@@ -45,6 +47,7 @@ app.use((req, res, next) => {
 // Setting routes
 app.use('/', index);
 app.use('/users', users);
+app.use('/tasks', tasks);
 
 const port = process.env.PORT || 3000;
 

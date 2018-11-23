@@ -24,7 +24,16 @@ class PersonalGroupSchema {
     this.db.run(`INSERT INTO personalGroups(userId, name) VALUES(?, ?)`, [userId, name],
       function(err) {
         if (err) throw err;
-        callback(this.lastID);
+        if (callback) callback(this.lastID);
+      }
+    );
+  }
+
+  getPersonalGroupByUserId(userId, callback) {
+    this.db.get(`SELECT * FROM personalGroups WHERE userId = ?`, [userId],
+      (err, row) => {
+        if (err) throw err;
+        if (callback) callback(row);
       }
     );
   }

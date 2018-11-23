@@ -2,11 +2,14 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const { ensureAuthenticated } = require('../helpers/auth');
 
 const User = require('../db/schemas/User');
 
 router.get('/login', (req, res) => {
-  res.render('users/login');
+  res.render('users/login', {
+    message: req.flash('error')
+  });
 });
 
 router.get('/register', (req, res) => {
@@ -29,7 +32,7 @@ router.post('/register', (req, res) => {
         text: 'Password must be at least 6 characters long'
       });
     }
-    
+
     if (user) {
       errors.push({
         text: 'A user with that username already exists'
@@ -65,16 +68,37 @@ router.post('/register', (req, res) => {
 // User login
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', {
-    successRedirect: '/',
+    successRedirect: '/users/me',
     failureRedirect: '/users/login',
     failureFlash: true
   })(req, res, next);
 });
 
+// User logout
 router.get('/logout', (req, res) => {
   req.logout();
   req.flash('success_msg', 'Logged out');
   res.redirect('/');
+});
+
+router.get('/me', ensureAuthenticated, (req, res) => {
+  res.redirect(`/users/${req.user.id}`);
+});
+
+// User profile
+router.get('/:id', ensureAuthenticated, (req, res) => {
+  let userId = req.params.id;
+
+  User.getUserById(userId, user => {
+    res.render('users/profile', {
+      user: user
+    });
+  });
+});
+
+// Update bio
+router.put('/bio', ensureAuthenticated, (req, res) => {
+  User.setBiography(req.user.id, req.body.biography);
 });
 
 module.exports = router;

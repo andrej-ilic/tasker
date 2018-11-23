@@ -11,21 +11,61 @@ class TaskSchema {
       CREATE TABLE IF NOT EXISTS tasks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         isFinished INTEGER DEFAULT 0,
+        title TEXT,
         content TEXT,
         groupId INTEGER,
-        isPersonal INTEGER,
-        CONSTRAINT tasks_fk_groupId FOREIGN KEY (groupId) REFERENCES groups(id) ON UPDATE CASCADE ON DELETE CASCADE
+        isPersonal INTEGER
       )
     `, []);
   }
 
-  create(content, groupId, isPersonal, isFinished) {
-    this.db.run(`INSERT INTO tasks (content, groupId, isPersonal, isFinished) VALUES (?, ?, ?, ?)`, [content, groupId, isPersonal, isFinished],
+  create(title, content, groupId, isPersonal, callback) {
+    this.db.run(`INSERT INTO tasks (title, content, groupId, isPersonal) VALUES (?, ?, ?, ?)`, [title, content, groupId, isPersonal],
       function(err) {
         if (err) throw err;
-        callback(this.lastID);
+        if (callback) callback(this.lastID);
       }
     );
+  }
+
+  getTasksByGroupId(groupId, callback) {
+    this.db.all(`SELECT * FROM tasks WHERE groupId = ?`, [groupId],
+      (err, rows) => {
+        if (err) throw err;
+        if (callback) callback(rows);
+      }
+    );
+  }
+
+  finishTask(taskId, callback) {
+    this.db.run(`UPDATE tasks SET isFinished = 1 WHERE id = ?`, [taskId],
+      function(err) {
+        if (err) throw err;
+        if (callback) callback(this.lastID);
+      }
+    );
+  }
+
+  undoTask(taskId, callback) {
+    this.db.run(`UPDATE tasks SET isFinished = 0 WHERE id = ?`, [taskId],
+      function(err) {
+        if (err) throw err;
+        if (callback) callback(this.lastID);
+      }
+    );
+  }
+
+  updateTask(taskId, title, content, callback) {
+    this.db.run(`UPDATE tasks SET title = ?, content = ? WHERE id = ?`, [title, content, taskId],
+      function(err) {
+        if (err) throw err;
+        if (callback) callback(this.lastID); 
+      }
+    );
+  }
+
+  deleteTask(taskId) {
+    this.db.run(`DELETE FROM tasks WHERE id = ?`, [taskId]);
   }
 }
 
