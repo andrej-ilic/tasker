@@ -17,6 +17,44 @@
     </div>
   </div>
   <div class="col-lg-9">
-
+    <div class="card mb-3">
+      <div class="card-body">
+        <h4><a href="/tasks">My latest tasks</a></h4>
+        <ul class="mb-0">
+          {{#each todoTasks}}
+            {{#if isFinished}}
+            {{else}}
+            <li class="mb-1">
+              <a href="/tasks#task{{id}}">
+              {{#if title}}
+              <span class="font-weight-bold">{{title}}</span> -
+              {{/if}}
+              {{content}}
+              </a>
+            </li>
+            {{/if}}
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h4><a href="/tasks">My finished tasks</a></h4>
+        <ul class="mb-0">
+          {{#each finishedTasks}}
+            {{#if isFinished}}
+            <li class="mb-1">
+              <a href="/tasks#task{{id}}">
+              {{#if title}}
+              <span class="font-weight-bold">{{title}}</span> -
+              {{/if}}
+              {{content}}
+              </a>
+            </li>
+            {{/if}}
+          {{/each}}
+        </ul>
+      </div>
+    </div>
   </div>
 </div>

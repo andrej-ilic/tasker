@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const { ensureAuthenticated } = require('../helpers/auth');
 
 const User = require('../db/schemas/User');
+const Task = require('../db/schemas/Task');
 
 router.get('/login', (req, res) => {
   res.render('users/login', {
@@ -90,8 +91,12 @@ router.get('/:id', ensureAuthenticated, (req, res) => {
   let userId = req.params.id;
 
   User.getUserById(userId, user => {
-    res.render('users/profile', {
-      user: user
+    Task.getTasksByGroupId(user.personalGroupId, tasks => {
+      res.render('users/profile', {
+        user: user,
+        todoTasks: tasks.filter(t => t.isFinished == false).reverse().slice(0, 6),
+        finishedTasks: tasks.filter(t => t.isFinished == true).reverse().slice(0, 6)
+      });
     });
   });
 });

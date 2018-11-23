@@ -1,9 +1,9 @@
-<h3 class="my-3 mt-4">{{group.name}}</h3>
+<h3 class="my-3 mt-4"><a href="/users/me">{{group.name}}</a></h3>
 <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#taskAddModal">Add task</button>
 {{> _taskAddModal}}
 <hr>
 {{#if tasks}}
-<div class="row">
+<div class="row mb-5">
   {{!-- Tasks to do --}}
   <div class="col-sm-6">
     <h4>To do</h4>
@@ -11,7 +11,7 @@
     {{#if isFinished}}
     {{else}}
     <div class="card mb-2">
-      <div class="card-body" id="{{id}}">
+      <div class="card-body" id="task{{id}}">
         {{#if title}}
         <h5 class="card-title">{{title}}</h5>
         {{/if}}
@@ -31,7 +31,7 @@
     {{#each tasks}}
     {{#if isFinished}}
     <div class="card mb-2">
-      <div class="card-body">
+      <div class="card-body" id="task{{id}}">
         {{#if title}}
         <h5 class="card-title">{{title}}</h5>
         {{/if}}

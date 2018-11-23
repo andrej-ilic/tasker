@@ -23,3 +23,11 @@
 #addBioForm {
   display: none;
 }
+
+a {
+  color: black;
+}
+
+a:hover {
+  text-decoration: none;
+}
