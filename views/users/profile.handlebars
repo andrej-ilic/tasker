@@ -2,30 +2,32 @@
   <div class="col-lg-3">
     <div class="card mb-3">
       <div class="card-body">
-        <h3 class="mb-0">{{user.name}}</h3>
-        <h4 class="font-weight-light mb-3">{{user.username}}</h4>
-        <p class="font-weight-light my-3">{{user.biography}}</p>
+        <h3 class="mb-0">{{userProfile.name}}</h3>
+        <h4 class="font-weight-light mb-3">{{userProfile.username}}</h4>
+        <p class="font-weight-light">{{userProfile.biography}}</p>
+        {{#if authenticatedUserId}}
         <a href="#" id="addBioButton" class="btn btn-secondary btn-sm btn-block" onclick="addBio()">
-          {{#if user.biography}}
+          {{#if userProfile.biography}}
           Edit bio
           {{else}}
           Add bio
           {{/if}}
         </a>
         {{> _bioAddForm}}
+        {{/if}}
       </div>
     </div>
   </div>
   <div class="col-lg-9">
     <div class="card mb-3">
       <div class="card-body">
-        <h4 class="mb-3"><a href="/tasks">My latest tasks</a></h4>
+        <h4 class="mb-3"><a href="/tasks">{{#if authenticatedUserId}}My latest tasks{{else}}{{userProfile.name}}'s latest tasks{{/if}}</a></h4>
         <ul class="mb-0 list-group">
           {{#if todoTasks}}
             {{#each todoTasks}}
               {{#if isFinished}}
               {{else}}
-              <a class="list-group-item list-group-item-action list-group-item-{{color}}" href="/tasks#task{{id}}">
+              <a class="list-group-item list-group-item-action list-group-item-{{color}} py-2" {{#if authenticatedUserId}}href="/tasks#task{{id}}"{{/if}}>
                 {{#if title}}
                 <span class="font-weight-bold">{{title}}</span> -
                 {{/if}}
@@ -41,12 +43,12 @@
     </div>
     <div class="card">
       <div class="card-body">
-        <h4 class="mb-3"><a href="/tasks">My finished tasks</a></h4>
+        <h4 class="mb-3"><a href="/tasks">{{#if authenticatedUserId}}My finished tasks{{else}}{{userProfile.name}}'s finished tasks{{/if}}</a></h4>
         <ul class="mb-0 list-group">
           {{#if finishedTasks}}
             {{#each finishedTasks}}
               {{#if isFinished}}
-              <a class="list-group-item list-group-item-action list-group-item-{{color}}" href="/tasks#task{{id}}">
+              <a class="list-group-item list-group-item-action list-group-item-{{color}} py-2" {{#if authenticatedUserId}}href="/tasks#task{{id}}"{{/if}}>
                 {{#if title}}
                 <span class="font-weight-bold">{{title}}</span> -
                 {{/if}}

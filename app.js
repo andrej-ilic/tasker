@@ -12,6 +12,7 @@ const app = express();
 const index = require('./routes/index');
 const users = require('./routes/users');
 const tasks = require('./routes/tasks');
+const groups = require('./routes/groups');
 
 // Passport configuration
 require('./config/passport')(passport);
@@ -48,6 +49,7 @@ app.use((req, res, next) => {
 app.use('/', index);
 app.use('/users', users);
 app.use('/tasks', tasks);
+app.use('/groups', groups);
 
 const port = process.env.PORT || 3000;
 

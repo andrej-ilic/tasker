@@ -11,11 +11,7 @@ class PersonalGroupSchema {
       CREATE TABLE IF NOT EXISTS personalGroups (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         userId INTEGER,
-        name TEXT,
-        CONSTRAINT personal_groups_fk_userId
-          FOREIGN KEY (userId)
-          REFERENCES users (id)
-          ON DELETE CASCADE
+        name TEXT
       )
     `, []);
   }

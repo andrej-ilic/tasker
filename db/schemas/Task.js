@@ -38,6 +38,16 @@ class TaskSchema {
     );
   }
 
+  getTasksByGroupIds(groupIds, callback) {
+    let sql = `SELECT * FROM tasks WHERE groupId IN (?#)`.replace('?#', groupIds.map(() => '?').join(','));
+    this.db.all(sql, groupIds,
+      (err, rows) => {
+        if (err) throw err;
+        if (callback) callback(rows);
+      }
+    );
+  }
+
   finishTask(taskId, callback) {
     this.db.run(`UPDATE tasks SET isFinished = 1 WHERE id = ?`, [taskId],
       function(err) {

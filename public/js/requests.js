@@ -41,6 +41,18 @@ function updateBio() {
   });
 }
 
+function deleteGroup(groupId) {
+  let willDelete = confirm('Are you sure you want to delete this group?');
+  if (willDelete) {
+    $.ajax({
+      type: 'delete',
+      url: `/groups/${groupId}/delete`
+    });
+  } else {
+    return willDelete;
+  }
+}
+
 function addBio() {
   $('#addBioButton').hide('fast');
   $('#addBioForm').show('fast');

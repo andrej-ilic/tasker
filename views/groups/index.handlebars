@@ -1,0 +1,21 @@
+<h3 class="my-3 mt-4">My groups</h3>
+<form class="form-inline" action="/groups/add" method="post">
+  <div class="form-group">
+    <input class="form-control" type="text" name="groupName" placeholder="Group name" required>
+  </div>
+  <button class="btn btn-primary ml-2" type="submit">Create group</button>
+</form>
+
+<div class="list-group mt-3">
+  {{#each groups}}
+  <a href="/groups/{{id}}" class="list-group-item list-group-item-action align-items-center">
+    {{name}}
+    {{#if primaryCount}}<span class="badge badge-primary badge-pill ml-1 font-weight-normal">{{primaryCount}}</span>{{/if}}
+    {{#if successCount}}<span class="badge badge-success badge-pill ml-1 font-weight-normal">{{successCount}}</span>{{/if}}
+    {{#if dangerCount}}<span class="badge badge-danger badge-pill ml-1 font-weight-normal">{{dangerCount}}</span>{{/if}}
+    {{#if warningCount}}<span class="badge badge-warning badge-pill ml-1 font-weight-normal">{{warningCount}}</span>{{/if}}
+    {{#if infoCount}}<span class="badge badge-info badge-pill ml-1 font-weight-normal">{{infoCount}}</span>{{/if}}
+    {{#if colorlessCount}}<span class="badge badge-light badge-pill ml-1 font-weight-normal">{{colorlessCount}}</span>{{/if}}
+  </a>
+  {{/each}}
+</div>

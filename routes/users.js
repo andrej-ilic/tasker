@@ -91,11 +91,13 @@ router.get('/me', ensureAuthenticated, (req, res) => {
 // User profile
 router.get('/:id', ensureAuthenticated, (req, res) => {
   let userId = req.params.id;
+  let authenticatedUserId = req.user.id == userId;
 
   User.getUserById(userId, user => {
     Task.getTasksByGroupId(user.personalGroupId, tasks => {
       res.render('users/profile', {
-        user: user,
+        userProfile: user,
+        authenticatedUserId: authenticatedUserId,
         todoTasks: tasks.filter(t => t.isFinished == false).reverse().slice(0, 6).map(x => {
           if (x.content.length > 70) {
             x.content = x.content.slice(0, 70);

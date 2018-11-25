@@ -1,0 +1,73 @@
+<h3 class="my-3 mt-4">{{group.name}}</h3>
+<button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#usersInGroup">Show users</button>
+{{> _usersInGroupModal}}
+<button type="button" class="btn btn-primary mb-2 ml-1" data-toggle="modal" data-target="#taskAddModal">Add task</button>
+<a href="/groups" class="btn btn-danger mb-2 ml-1" onclick="return deleteGroup({{group.id}})">Delete group</a>
+<form class="form-inline float-right mb-2" action="/groups/{{group.id}}/users/add" method="post">
+  <div class="form-group">
+    <input type="text" name="username" class="form-control" placeholder="Username">
+  </div>
+  <input class="btn btn-primary ml-2" type="submit" value="Add user">
+</form>
+{{> _taskAddToGroupModal}}
+<hr>
+{{#if tasks}}
+<div class="row mb-5">
+  {{!-- Tasks to do --}}
+  <div class="col-sm-6 mb-4">
+    <h4>To do</h4>
+    {{#each tasks}}
+    {{#if isFinished}}
+    {{else}}
+    {{#if color}}
+    <div class="card mb-2 border-{{color}}">
+      {{#if title}}
+      <h5 class="card-header bg-{{color}}">{{title}}</h5>
+      {{/if}}
+      {{else}}
+      <div class="card mb-2">
+        {{#if title}}
+        <h5 class="card-header">{{title}}</h5>
+        {{/if}}
+        {{/if}}
+        <div class="card-body" id="task{{id}}">
+          <p class="card-text">{{content}}</p>
+          <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#taskEditModal{{id}}">Edit</button>
+          {{> _taskEditGroupModal}}
+          <a href="/groups/{{groupId}}" class="btn btn-sm btn-outline-success float-right" onclick="finishTask({{id}})">Finish</a>
+          <a href="/groups/{{groupId}}" class="btn btn-sm btn-outline-danger" onclick="deleteTask({{id}})">Delete</a>
+        </div>
+      </div>
+      {{/if}}
+      {{/each}}
+    </div>
+    {{!-- Finished tasks --}}
+    <div class="col-sm-6">
+      <h4>Finished</h4>
+      {{#each tasks}}
+      {{#if isFinished}}
+      {{#if color}}
+      <div class="card mb-2 border-{{color}}">
+        {{#if title}}
+        <h5 class="card-header bg-{{color}}">{{title}}</h5>
+        {{/if}}
+        {{else}}
+        <div class="card mb-2">
+          {{#if title}}
+          <h5 class="card-header">{{title}}</h5>
+          {{/if}}
+          {{/if}}
+          <div class="card-body" id="task{{id}}">
+            <p class="card-text">{{content}}</p>
+            <a href="/groups/{{groupId}}" class="btn btn-outline-secondary btn-sm" onclick="undoTask({{id}})">Undo</a>
+            <a href="/groups/{{groupId}}" class="btn btn-outline-danger btn-sm float-right" onclick="deleteTask({{id}})">Delete</a>
+          </div>
+        </div>
+        {{else}}
+        {{/if}}
+        {{/each}}
+      </div>
+    </div>
+    {{else}}
+    <p>You don't have any tasks. Create one by clicking on the 'Add task' button.</p>
+    {{/if}}
