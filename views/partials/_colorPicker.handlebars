@@ -1,0 +1,27 @@
+{{#if hasColor}}
+<button type="button" class="btn btn-{{color}} dropdown-toggle btnGroupColor" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+{{else}}
+<button type="button" class="btn btn-light dropdown-toggle btnGroupColor" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+{{/if}}
+  Color
+</button>
+
+<div class="dropdown-menu btnGroupColorMenu" aria-labelledby="btnGroupColor">
+  <label class="btn btn-primary btn-block">
+    <input type="radio" name="color" value="primary" {{#if isPrimary}}checked{{/if}}>
+  </label>
+  <label class="btn btn-success btn-block">
+    <input type="radio" name="color" value="success" {{#if isSuccess}}checked{{/if}}>
+  </label>
+  <label class="btn btn-danger btn-block">
+    <input type="radio" name="color" value="danger" {{#if isDanger}}checked{{/if}}>
+  </label>
+  <label class="btn btn-warning btn-block">
+    <input type="radio" name="color" value="warning" {{#if isWarning}}checked{{/if}}>
+  </label>
+  <label class="btn btn-info btn-block">
+    <input type="radio" name="color" value="info" {{#if isInfo}}checked{{/if}}>
+  </label>
+  <label class="btn btn-light btn-block">
+    <input type="radio" name="color" value="">
+</div>

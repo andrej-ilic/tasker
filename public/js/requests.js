@@ -24,10 +24,11 @@ function editTask(taskId) {
   let form = $(`#editForm${taskId}`)[0];
   let title = form.title.value.trim();
   let content = form.content.value.trim();
+  let color = form.color.value ? form.color.value : '';
   $.ajax({
     type: 'put',
     url: `/tasks/${taskId}`,
-    data: { taskId, title, content }
+    data: { taskId, title, content, color }
   });
 }
 

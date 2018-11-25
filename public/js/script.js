@@ -23,7 +23,6 @@ function validateRegisterForm() {
     }, 3000);
     return false;
   }
-  console.log(password.length);
   if (password.length < 6) {
     document.getElementById('passwordLengthMessage').style.opacity = '1';
     setTimeout(() => {
@@ -32,3 +31,21 @@ function validateRegisterForm() {
     return false;
   }
 }
+
+$(() => {
+  const colors = ['primary', 'success', 'danger', 'warning', 'info', 'light'];
+  let btnGroupColors = Array.from($('.btnGroupColor'));
+  let btnGroupColorMenus = Array.from($('.btnGroupColorMenu'));
+  for (let i = 0; i < btnGroupColorMenus.length; i++) {
+    let labels = Array.from(btnGroupColorMenus[i].getElementsByTagName('label'));
+    labels.forEach((label, labelIndex) => {
+      label.onclick = () => {
+        console.log(1);
+        colors.forEach(color => {
+          btnGroupColors[i].classList.remove('btn-' + color);
+        });
+        btnGroupColors[i].classList.add('btn-' + colors[labelIndex]);
+      }
+    });
+  }
+});

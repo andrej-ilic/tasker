@@ -14,13 +14,14 @@ class TaskSchema {
         title TEXT,
         content TEXT,
         groupId INTEGER,
+        color TEXT,
         isPersonal INTEGER
       )
     `, []);
   }
 
-  create(title, content, groupId, isPersonal, callback) {
-    this.db.run(`INSERT INTO tasks (title, content, groupId, isPersonal) VALUES (?, ?, ?, ?)`, [title, content, groupId, isPersonal],
+  create(title, content, color, groupId, isPersonal, callback) {
+    this.db.run(`INSERT INTO tasks (title, content, color, groupId, isPersonal) VALUES (?, ?, ?, ?, ?)`, [title, content, color, groupId, isPersonal],
       function(err) {
         if (err) throw err;
         if (callback) callback(this.lastID);
@@ -55,8 +56,8 @@ class TaskSchema {
     );
   }
 
-  updateTask(taskId, title, content, callback) {
-    this.db.run(`UPDATE tasks SET title = ?, content = ? WHERE id = ?`, [title, content, taskId],
+  updateTask(taskId, title, content, color, callback) {
+    this.db.run(`UPDATE tasks SET title = ?, content = ?, color = ? WHERE id = ?`, [title, content, color, taskId],
       function(err) {
         if (err) throw err;
         if (callback) callback(this.lastID); 
