@@ -5,21 +5,21 @@
 {{#if tasks}}
 <div class="row mb-5">
   {{!-- Tasks to do --}}
-  <div class="col-sm-6">
+  <div class="col-sm-6 mb-4">
     <h4>To do</h4>
     {{#each tasks}}
     {{#if isFinished}}
     {{else}}
     <div class="card mb-2">
+      {{#if title}}
+      <h5 class="card-header">{{title}}</h5>
+      {{/if}}
       <div class="card-body" id="task{{id}}">
-        {{#if title}}
-        <h5 class="card-title">{{title}}</h5>
-        {{/if}}
         <p class="card-text">{{content}}</p>
-        <button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#taskEditModal{{id}}">Edit</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#taskEditModal{{id}}">Edit</button>
         {{> _taskEditModal}}
-        <a href="/tasks" class="btn btn-sm btn-success float-right" onclick="finishTask({{id}})">Finish</a>
-        <a href="/tasks" class="btn btn-sm btn-danger" onclick="deleteTask({{id}})">Delete</a>
+        <a href="/tasks" class="btn btn-sm btn-outline-success float-right" onclick="finishTask({{id}})">Finish</a>
+        <a href="/tasks" class="btn btn-sm btn-outline-danger" onclick="deleteTask({{id}})">Delete</a>
       </div>
     </div>
     {{/if}}
@@ -31,13 +31,13 @@
     {{#each tasks}}
     {{#if isFinished}}
     <div class="card mb-2">
+      {{#if title}}
+      <h5 class="card-header">{{title}}</h5>
+      {{/if}}
       <div class="card-body" id="task{{id}}">
-        {{#if title}}
-        <h5 class="card-title">{{title}}</h5>
-        {{/if}}
         <p class="card-text">{{content}}</p>
-        <a href="/tasks" class="btn btn-secondary btn-sm" onclick="undoTask({{id}})">Undo</a>
-        <a href="/tasks" class="btn btn-danger btn-sm float-right" onclick="deleteTask({{id}})">Delete</a>
+        <a href="/tasks" class="btn btn-outline-secondary btn-sm" onclick="undoTask({{id}})">Undo</a>
+        <a href="/tasks" class="btn btn-outline-danger btn-sm float-right" onclick="deleteTask({{id}})">Delete</a>
       </div>
     </div>
     {{else}}

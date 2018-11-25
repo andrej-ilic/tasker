@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-lg-3">
-    <div class="card">
+    <div class="card mb-3">
       <div class="card-body">
         <h3 class="mb-0">{{user.name}}</h3>
         <h4 class="font-weight-light mb-3">{{user.username}}</h4>
@@ -21,19 +21,23 @@
       <div class="card-body">
         <h4><a href="/tasks">My latest tasks</a></h4>
         <ul class="mb-0">
-          {{#each todoTasks}}
-            {{#if isFinished}}
-            {{else}}
-            <li class="mb-1">
-              <a href="/tasks#task{{id}}">
-              {{#if title}}
-              <span class="font-weight-bold">{{title}}</span> -
+          {{#if todoTasks}}
+            {{#each todoTasks}}
+              {{#if isFinished}}
+              {{else}}
+              <li class="mb-1">
+                <a href="/tasks#task{{id}}">
+                {{#if title}}
+                <span class="font-weight-bold">{{title}}</span> -
+                {{/if}}
+                {{content}}
+                </a>
+              </li>
               {{/if}}
-              {{content}}
-              </a>
-            </li>
-            {{/if}}
-          {{/each}}
+            {{/each}}
+          {{else}}
+          <li class="mb-1">You don't have any tasks</li>
+          {{/if}}
         </ul>
       </div>
     </div>
@@ -41,18 +45,22 @@
       <div class="card-body">
         <h4><a href="/tasks">My finished tasks</a></h4>
         <ul class="mb-0">
-          {{#each finishedTasks}}
-            {{#if isFinished}}
-            <li class="mb-1">
-              <a href="/tasks#task{{id}}">
-              {{#if title}}
-              <span class="font-weight-bold">{{title}}</span> -
+          {{#if finishedTasks}}
+            {{#each finishedTasks}}
+              {{#if isFinished}}
+              <li class="mb-1">
+                <a href="/tasks#task{{id}}">
+                {{#if title}}
+                <span class="font-weight-bold">{{title}}</span> -
+                {{/if}}
+                {{content}}
+                </a>
+              </li>
               {{/if}}
-              {{content}}
-              </a>
-            </li>
-            {{/if}}
-          {{/each}}
+            {{/each}}
+          {{else}}
+          <li class="mb-1">You haven't finished any tasks.</li>
+          {{/if}}
         </ul>
       </div>
     </div>

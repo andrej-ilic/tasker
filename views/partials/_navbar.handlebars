@@ -5,33 +5,33 @@
     {{else}}
     <a class="navbar-brand" href="/">Tasker.</a>
     {{/if}}
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    {{#if user}}
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <a href="/users/me" class="nav-link">{{user.name}}</a>
-      </li>
-      <li class="nav-item">
-        <a href="/tasks" class="nav-link">My tasks</a>
-      </li>
-      <li class="nav-item">
-        <a href="/users/logout" class="nav-link">Logout</a>
-      </li>
-    </ul>
-    {{else}}
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
+        {{#if user}}
+        <li class="nav-item">
+          <a href="/tasks" class="nav-link">My tasks</a>
+        </li>
+        <li class="nav-item">
+          <a href="/users/me" class="nav-link">{{user.name}}</a>
+        </li>
+        <li class="nav-item">
+          <a href="/users/logout" class="nav-link">Logout</a>
+        </li>
+        {{else}}
         <li class="nav-item">
           <a class="nav-link" href="/users/login">Log in</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/users/register">Sign up</a>
         </li>
+        {{/if}}
       </ul>
     </div>
-    {{/if}}
+
   </div>
 </nav>
