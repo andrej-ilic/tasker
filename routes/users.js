@@ -8,6 +8,8 @@ const {
 
 const User = require('../db/schemas/User');
 const Task = require('../db/schemas/Task');
+const Group = require('../db/schemas/Group');
+const UserGroup = require('../db/schemas/UserGroup');
 
 router.get('/login', (req, res) => {
   res.render('users/login', {
@@ -94,24 +96,44 @@ router.get('/:id', ensureAuthenticated, (req, res) => {
   let authenticatedUserId = req.user.id == userId;
 
   User.getUserById(userId, user => {
-    Task.getTasksByGroupId(user.personalGroupId, tasks => {
-      res.render('users/profile', {
-        userProfile: user,
-        authenticatedUserId: authenticatedUserId,
-        todoTasks: tasks.filter(t => t.isFinished == false).reverse().slice(0, 6).map(x => {
-          if (x.content.length > 70) {
-            x.content = x.content.slice(0, 70);
-            x.content += '...';
-          }
-          return x;
-        }),
-        finishedTasks: tasks.filter(t => t.isFinished == true).reverse().slice(0, 6).map(x => {
-          if (x.content.length > 70) {
-            x.content = x.content.slice(0, 70);
-            x.content += '...';
-          }
-          return x;
-        })
+    Task.getTasksByGroupId(user.personalGroupId, personalTasks => {
+      UserGroup.getGroupIdsByUserId(userId, groupIds => {
+        groupIds = Array.from(groupIds.map(x => x.groupId));
+        Group.getGroupsByIds(groupIds, groups => {
+          groups = Array.from(groups);
+          Task.getTasksByGroupIds(groupIds, tasks => {
+            tasks = Array.from(tasks);
+            groups.forEach(group => {
+              group.tasks = tasks.filter(task => task.groupId == group.id);
+              group.primaryCount = group.tasks.filter(task => task.color == 'primary' && !task.isFinished).length;
+              group.successCount = group.tasks.filter(task => task.color == 'success' && !task.isFinished).length;
+              group.dangerCount = group.tasks.filter(task => task.color == 'danger' && !task.isFinished).length;
+              group.warningCount = group.tasks.filter(task => task.color == 'warning' && !task.isFinished).length;
+              group.infoCount = group.tasks.filter(task => task.color == 'info' && !task.isFinished).length;
+              group.colorlessCount = group.tasks.filter(task => !task.color && !task.isFinished).length;
+            });
+            res.render('users/profile', {
+              userProfile: user,
+              groups: groups,
+              tasks: tasks,
+              authenticatedUserId: authenticatedUserId,
+              todoTasks: personalTasks.filter(t => t.isFinished == false).reverse().slice(0, 6).map(x => {
+                if (x.content.length > 70) {
+                  x.content = x.content.slice(0, 70);
+                  x.content += '...';
+                }
+                return x;
+              }),
+              finishedTasks: personalTasks.filter(t => t.isFinished == true).reverse().slice(0, 6).map(x => {
+                if (x.content.length > 70) {
+                  x.content = x.content.slice(0, 70);
+                  x.content += '...';
+                }
+                return x;
+              })
+            });
+          });
+        });
       });
     });
   });
