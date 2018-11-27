@@ -9,42 +9,38 @@ class GroupSchema {
   createTable() {
     this.db.run(`
       CREATE TABLE IF NOT EXISTS groups (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT
+        id           INTEGER   PRIMARY KEY   AUTOINCREMENT,
+        name         TEXT      NOT NULL      DEFAULT '',
+        isPersonal   INTEGER   NOT NULL      DEFAULT 0
       )
     `, []);
   }
 
   create(name, callback) {
-    this.db.run(`INSERT INTO groups(name) VALUES(?)`, [name],
-      function (err) {
-        if (err) throw err;
-        if (callback) callback(this.lastID);
-      }
-    );
+    this.db.run(`INSERT INTO groups(name) VALUES(?)`, [name], callback);
+  }
+
+  createPersonalGroup(name, callback) {
+    this.db.run(`INSERT INTO groups(name, isPersonal) VALUES (?, 1)`, [name], callback);
+  }
+
+  getPersonalGroup(userId, callback) {
+    this.db.get(`SELECT groups.id, groups.name, groups.isPersonal
+                 FROM (SELECT groupId FROM users_groups WHERE userId = ?) usersGroups INNER JOIN groups ON groups.id = usersGroups.groupId 
+                 WHERE groups.isPersonal = 1`, [userId], callback);
   }
 
   getGroupById(groupId, callback) {
-    this.db.get(`SELECT * FROM groups WHERE id = ?`, [groupId],
-      function (err, row) {
-        if (err) throw err;
-        if (callback) callback(row);
-      }
-    );
+    this.db.get(`SELECT * FROM groups WHERE id = ?`, [groupId], callback);
   }
 
   getGroupsByIds(groupIds, callback) {
-    let sql = `SELECT * FROM groups WHERE id IN (?#)`.replace('?#', groupIds.map(() => '?').join(','));
-    this.db.all(sql, groupIds,
-      function(err, rows) {
-        if (err) throw err;
-        if (callback) callback(rows);
-      }
-    );
+    let sql = `SELECT * FROM groups WHERE id IN (?#) AND isPersonal = 0`.replace('?#', groupIds.map(() => '?').join(','));
+    this.db.all(sql, groupIds, callback);
   }
 
-  deleteGroup(groupId) {
-    this.db.run(`DELETE FROM groups WHERE id = ?`, [groupId]);
+  deleteGroup(groupId, callback) {
+    this.db.run(`DELETE FROM groups WHERE id = ?`, [groupId], callback);
   }
 }
 

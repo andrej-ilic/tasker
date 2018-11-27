@@ -2,14 +2,16 @@ const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated } = require('../helpers/auth');
 
-const PersonalGroup = require('../db/schemas/PersonalGroup');
+const Group = require('../db/schemas/Group');
 const Task = require('../db/schemas/Task');
 
+// Personal tasks page
 router.get('/', ensureAuthenticated, (req, res) => {
-  PersonalGroup.getPersonalGroupByUserId(req.user.id, personalGroup => {
-    Task.getTasksByGroupId(personalGroup.id, tasks => {
-      tasks = Array.from(tasks);
-      tasks.forEach(task => {
+  let userId = req.user.id;
+
+  Group.getPersonalGroup(userId, personalGroup => {
+    Task.getTasksByGroupId(personalGroup.id, personalTasks => {
+      personalTasks.forEach(task => {
         task.isPrimary = task.color == 'primary';
         task.isSuccess = task.color == 'success';
         task.isDanger = task.color == 'danger';
@@ -19,18 +21,19 @@ router.get('/', ensureAuthenticated, (req, res) => {
       });
       res.render('tasks', {
         group: personalGroup,
-        tasks: tasks
+        tasks: personalTasks
       });
     });
   });
 });
 
+// Add personal task
 router.post('/add', ensureAuthenticated, (req, res) => {
   let title = req.body.title;
   let content = req.body.content;
   let groupId = req.body.groupId;
   let color = req.body.color ? req.body.color : '';
-  Task.create(title, content, color, groupId, 1, taskId => {
+  Task.create(title, content, color, groupId, taskId => {
     res.redirect('/tasks');
   });
 });
@@ -41,6 +44,7 @@ router.put('/:id/finish', ensureAuthenticated, (req, res) => {
   Task.finishTask(id);
 });
 
+// Undo task
 router.put('/:id/undo', ensureAuthenticated, (req, res) => {
   let id = req.params.id;
   Task.undoTask(id);
@@ -58,7 +62,7 @@ router.put('/:id', ensureAuthenticated, (req, res) => {
   let title = req.body.title;
   let content = req.body.content;
   let color = req.body.color ? req.body.color : '';
-  Task.updateTask(id, title, content, color);
+  Task.editTask(id, title, content, color);
 });
 
 module.exports = router;

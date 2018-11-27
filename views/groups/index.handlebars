@@ -1,9 +1,12 @@
 <h3 class="my-3 mt-4">My groups</h3>
 <form class="form-inline" action="/groups/add" method="post">
-  <div class="form-group">
-    <input class="form-control" type="text" name="groupName" placeholder="Group name" required>
-  </div>
-  <button class="btn btn-primary ml-2" type="submit">Create group</button>
+  <label for="groupName" class="sr-only">Group name</label>
+  <input class="form-control mb-2 mb-sm-0 mr-sm-2" type="text" name="groupName" placeholder="Group name" required>
+  <button class="btn btn-primary" type="submit">Create group</button>
 </form>
-
+{{#if usersGroups}}
 {{> _groupListGroup}}
+{{else}}
+<hr class="mt-4">
+<p>You are not a part of any groups. Create one or ask your colleague to add you to a group.</p>
+{{/if}}

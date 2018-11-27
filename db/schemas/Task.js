@@ -9,74 +9,44 @@ class TaskSchema {
   createTable() {
     this.db.run(`
       CREATE TABLE IF NOT EXISTS tasks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        isFinished INTEGER DEFAULT 0,
-        title TEXT,
-        content TEXT,
-        groupId INTEGER,
-        color TEXT,
-        isPersonal INTEGER
+        id            INTEGER   PRIMARY KEY   AUTOINCREMENT,
+        isFinished    INTEGER   NOT NULL      DEFAULT 0,
+        title         TEXT      NOT NULL      DEFAULT '',
+        content       TEXT,
+        color         TEXT,
+        groupId       INTEGER,
+        FOREIGN KEY(groupId) REFERENCES groups(id) ON DELETE CASCADE
       )
     `, []);
   }
 
-  create(title, content, color, groupId, isPersonal, callback) {
-    this.db.run(`INSERT INTO tasks (title, content, color, groupId, isPersonal) VALUES (?, ?, ?, ?, ?)`, [title, content, color, groupId, isPersonal],
-      function(err) {
-        if (err) throw err;
-        if (callback) callback(this.lastID);
-      }
-    );
+  create(title, content, color, groupId, callback) {
+    this.db.run(`INSERT INTO tasks (title, content, color, groupId) VALUES (?, ?, ?, ?)`, [title, content, color, groupId], callback);
   }
 
   getTasksByGroupId(groupId, callback) {
-    this.db.all(`SELECT * FROM tasks WHERE groupId = ?`, [groupId],
-      (err, rows) => {
-        if (err) throw err;
-        if (callback) callback(rows);
-      }
-    );
+    this.db.all(`SELECT * FROM tasks WHERE groupId = ?`, [groupId], callback);
   }
 
   getTasksByGroupIds(groupIds, callback) {
     let sql = `SELECT * FROM tasks WHERE groupId IN (?#)`.replace('?#', groupIds.map(() => '?').join(','));
-    this.db.all(sql, groupIds,
-      (err, rows) => {
-        if (err) throw err;
-        if (callback) callback(rows);
-      }
-    );
+    this.db.all(sql, groupIds, callback);
   }
 
   finishTask(taskId, callback) {
-    this.db.run(`UPDATE tasks SET isFinished = 1 WHERE id = ?`, [taskId],
-      function(err) {
-        if (err) throw err;
-        if (callback) callback(this.lastID);
-      }
-    );
+    this.db.run(`UPDATE tasks SET isFinished = 1 WHERE id = ?`, [taskId], callback);
   }
 
   undoTask(taskId, callback) {
-    this.db.run(`UPDATE tasks SET isFinished = 0 WHERE id = ?`, [taskId],
-      function(err) {
-        if (err) throw err;
-        if (callback) callback(this.lastID);
-      }
-    );
+    this.db.run(`UPDATE tasks SET isFinished = 0 WHERE id = ?`, [taskId], callback);
   }
 
-  updateTask(taskId, title, content, color, callback) {
-    this.db.run(`UPDATE tasks SET title = ?, content = ?, color = ? WHERE id = ?`, [title, content, color, taskId],
-      function(err) {
-        if (err) throw err;
-        if (callback) callback(this.lastID); 
-      }
-    );
+  editTask(taskId, title, content, color, callback) {
+    this.db.run(`UPDATE tasks SET title = ?, content = ?, color = ? WHERE id = ?`, [title, content, color, taskId], callback);
   }
 
-  deleteTask(taskId) {
-    this.db.run(`DELETE FROM tasks WHERE id = ?`, [taskId]);
+  deleteTask(taskId, callback) {
+    this.db.run(`DELETE FROM tasks WHERE id = ?`, [taskId], callback);
   }
 }
 

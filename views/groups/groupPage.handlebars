@@ -1,14 +1,21 @@
 <h3 class="my-3 mt-4">{{group.name}}</h3>
-<button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#usersInGroup">Show users</button>
-{{> _usersInGroupModal}}
-<button type="button" class="btn btn-primary mb-2 ml-1" data-toggle="modal" data-target="#taskAddModal">Add task</button>
-<a href="/groups" class="btn btn-danger mb-2 ml-1" onclick="return deleteGroup({{group.id}})">Delete group</a>
-<form class="form-inline float-right mb-2" action="/groups/{{group.id}}/users/add" method="post">
-  <div class="form-group">
-    <input type="text" name="username" class="form-control" placeholder="Username">
+<div class="row">
+  <div class="col-md-6">
+    <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#taskAddModal">Add task</button>
+    <a href="/groups" class="btn btn-danger mb-2 ml-1" onclick="return deleteGroup({{group.id}})">Delete group</a>
+    <button type="button" class="btn btn-success mb-2 ml-1" data-toggle="modal" data-target="#usersInGroup">Show users</button>
   </div>
-  <input class="btn btn-primary ml-2" type="submit" value="Add user">
-</form>
+  <div class="col-md-6">
+    <form class="form-inline float-none float-md-right" action="/groups/{{group.id}}/users/add" method="post">
+      <div class="form-group mb-0">
+        <label for="username" class="sr-only">Username</label>
+        <input type="text" name="username" class="form-control" placeholder="Username">
+      </div>
+      <button class="btn btn-primary ml-2" type="submit">Add user</button>
+    </form>
+  </div>
+</div>
+{{> _usersInGroupModal}}
 {{> _taskAddToGroupModal}}
 <hr>
 {{#if tasks}}
@@ -68,6 +75,8 @@
         {{/each}}
       </div>
     </div>
-    {{else}}
-    <p>You don't have any tasks. Create one by clicking on the 'Add task' button.</p>
-    {{/if}}
+  </div>
+</div>
+{{else}}
+<p>You don't have any tasks. Create one by clicking on the 'Add task' button.</p>
+{{/if}}

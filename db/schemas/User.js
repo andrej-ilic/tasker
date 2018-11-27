@@ -1,5 +1,6 @@
 const db = require('../db');
-const PersonalGroup = require('../schemas/PersonalGroup');
+const Group = require('../schemas/Group');
+const UserGroup = require('../schemas/UserGroup');
 
 class UserSchema {
   constructor() {
@@ -10,70 +11,38 @@ class UserSchema {
   createTable() {
     this.db.run(`
       CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        personalGroupId INTEGER,
-        name TEXT,
-        username TEXT,
-        hash TEXT,
-        biography TEXT DEFAULT ''
+        id         INTEGER   PRIMARY    KEY AUTOINCREMENT,
+        name       TEXT      NOT NULL,
+        username   TEXT      NOT NULL   UNIQUE,
+        password   TEXT      NOT NULL,
+        biography  TEXT      DEFAULT ''
       )
     `, []);
   }
 
-  create(userData, callback) {
-    this.db.run(`INSERT INTO users(name, username, hash) VALUES(?, ?, ?)`, [userData.name, userData.username, userData.hash],
-      function (err) {
-        if (err) throw err;
-        userData.id = this.lastID;
-        PersonalGroup.create(userData.id, userData.name + '\'s tasks',
-          personalGroupId => {
-            const User = require('./User');
-            User.setPersonalGroupId(userData.id, personalGroupId);
-          });
-        if (callback) callback(this.lastID);
-      }
-    );
+  create(name, username, password, callback) {
+    this.db.run(`INSERT INTO users(name, username, password) VALUES(?, ?, ?)`, [name, username, password], userId => {
+      Group.createPersonalGroup(`${name}'s personal tasks`, groupId => {
+        UserGroup.create(userId, groupId, callback);
+      });
+    });
   }
 
   getUserByUsername(username, callback) {
-    this.db.get(`SELECT * FROM users WHERE username = ?`, [username],
-      function (err, row) {
-        if (err) throw err;
-        if (callback) callback(row);
-      }
-    );
+    this.db.get(`SELECT * FROM users WHERE username = ?`, [username], callback);
   }
 
-  getUserById(id, callback) {
-    this.db.get(`SELECT * FROM users WHERE id = ?`, [id],
-      function (err, row) {
-        if (err) throw err;
-        if (callback) callback(row);
-      }
-    );
+  getUserById(userId, callback) {
+    this.db.get(`SELECT * FROM users WHERE id = ?`, [userId], callback);
   }
 
-  getUsersByIds(ids, callback) {
-    let sql = `SELECT * FROM users WHERE id IN (?#)`.replace('?#', ids.map(() => '?').join(','));
-    this.db.all(sql, ids,
-      function(err, rows) {
-        if (err) throw err;
-        if (callback) callback(rows);
-      }
-    );
+  getUsersByIds(userIds, callback) {
+    let sql = `SELECT * FROM users WHERE id IN (?#)`.replace('?#', userIds.map(() => '?').join(','));
+    this.db.all(sql, userIds, callback);
   }
 
-  setBiography(id, biography, callback) {
-    this.db.run(`UPDATE users SET biography = ? WHERE id = ?`, [biography, id],
-      function (err) {
-        if (err) throw err;
-        if (callback) callback(this.lastID);
-      }
-    );
-  }
-
-  setPersonalGroupId(userId, personalGroupId) {
-    this.db.run(`UPDATE users SET personalGroupId = ? WHERE id = ?`, [personalGroupId, userId]);
+  editBiography(userId, biography, callback) {
+    this.db.run(`UPDATE users SET biography = ? WHERE id = ?`, [biography, userId], callback);
   }
 
   deleteUser(userId) {
