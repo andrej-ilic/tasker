@@ -4,8 +4,7 @@
   "description": "An app for managing tasks",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app"
+    "start": "node app.js"
   },
   "author": "Andrej Ilić",
   "license": "ISC",
