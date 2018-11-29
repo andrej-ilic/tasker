@@ -52,13 +52,3 @@ function deleteGroup(groupId) {
     return willDelete;
   }
 }
-
-function addBio() {
-  $('#addBioButton').hide('fast');
-  $('#addBioForm').show('fast');
-}
-
-function addBioCancel() {
-  $('#addBioButton').show('fast');
-  $('#addBioForm').hide('fast');
-}

@@ -5,7 +5,7 @@
       <div class="card-body">
         <h3 class="mb-0">{{userProfile.name}}</h3>
         <h4 class="font-weight-light mb-3">{{userProfile.username}}</h4>
-        <p class="font-weight-light">{{userProfile.biography}}</p>
+        <p class="font-weight-light" id="bio">{{userProfile.biography}}</p>
         {{#if isPersonalPage}}
         <a href="#" id="addBioButton" class="btn btn-secondary btn-sm btn-block" onclick="addBio()">
           {{#if userProfile.biography}}
@@ -67,7 +67,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card mb-3">
       <div class="card-body">
         <h4 class="mb-3">
           <a href="/groups">{{#if isPersonalPage}}My groups{{else}}Groups{{/if}}</a>

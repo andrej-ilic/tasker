@@ -32,6 +32,18 @@ function validateRegisterForm() {
   }
 }
 
+function addBio() {
+  $('#bio').hide('fast');
+  $('#addBioButton').hide('fast');
+  $('#addBioForm').show('fast');
+}
+
+function addBioCancel() {
+  $('#bio').show('fast');
+  $('#addBioButton').show('fast');
+  $('#addBioForm').hide('fast');
+}
+
 $(() => {
   const colors = ['primary', 'success', 'danger', 'warning', 'info', 'light'];
   let btnGroupColors = Array.from($('.btnGroupColor'));
