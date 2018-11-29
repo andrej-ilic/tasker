@@ -45,6 +45,10 @@ function addBioCancel() {
 }
 
 $(() => {
+  $('.noJump').click(event => {
+    event.preventDefault();
+  });
+
   const colors = ['primary', 'success', 'danger', 'warning', 'info', 'light'];
   let btnGroupColors = Array.from($('.btnGroupColor'));
   let btnGroupColorMenus = Array.from($('.btnGroupColorMenu'));
@@ -52,7 +56,6 @@ $(() => {
     let labels = Array.from(btnGroupColorMenus[i].getElementsByTagName('label'));
     labels.forEach((label, labelIndex) => {
       label.onclick = () => {
-        console.log(1);
         colors.forEach(color => {
           btnGroupColors[i].classList.remove('btn-' + color);
         });
