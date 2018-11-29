@@ -41,19 +41,28 @@ router.post('/add', ensureAuthenticated, (req, res) => {
 // Finish task
 router.put('/:id/finish', ensureAuthenticated, (req, res) => {
   let id = req.params.id;
-  Task.finishTask(id);
+  let url = req.body.url;
+  Task.finishTask(id, () => {
+    res.send('done');
+  });
 });
 
 // Undo task
 router.put('/:id/undo', ensureAuthenticated, (req, res) => {
   let id = req.params.id;
-  Task.undoTask(id);
+  let url = req.body.url;
+  Task.undoTask(id, () => {
+    res.send('done');
+  });
 });
 
 // Delete task
 router.delete('/:id', ensureAuthenticated, (req, res) => {
   let id = req.params.id;
-  Task.deleteTask(id);
+  let url = req.body.url;
+  Task.deleteTask(id, () => {
+    res.send('done');
+  });
 });
 
 // Edit task
@@ -62,7 +71,10 @@ router.put('/:id', ensureAuthenticated, (req, res) => {
   let title = req.body.title;
   let content = req.body.content;
   let color = req.body.color ? req.body.color : '';
-  Task.editTask(id, title, content, color);
+  let url = req.body.url;
+  Task.editTask(id, title, content, color, () => {
+    res.send('done');
+  });
 });
 
 module.exports = router;

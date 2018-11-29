@@ -93,7 +93,9 @@ router.post('/add', ensureAuthenticated, (req, res) => {
 router.delete('/:id/delete', ensureAuthenticated, (req, res) => {
   let groupId = req.params.id;
 
-  Group.deleteGroup(groupId);
+  Group.deleteGroup(groupId, () => {
+    res.send('done');
+  });
 });
 
 // Add user to group

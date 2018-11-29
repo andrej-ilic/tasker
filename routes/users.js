@@ -144,7 +144,9 @@ router.get('/:id', ensureAuthenticated, (req, res) => {
 
 // Update bio
 router.put('/bio', ensureAuthenticated, (req, res) => {
-  User.editBiography(req.user.id, req.body.biography);
+  User.editBiography(req.user.id, req.body.biography, () => {
+    res.send('done');
+  });
 });
 
 module.exports = router;
