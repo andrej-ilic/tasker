@@ -2,3 +2,4 @@ node_modules
 sqlite3.exe
 *.sqlite3
 model.erwin
+*.sql

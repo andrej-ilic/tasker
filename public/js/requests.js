@@ -71,12 +71,17 @@ function deleteGroup(groupId) {
   }
 }
 
-function removeUserFromGroup(userId, groupId) {
+function removeUserFromGroup(userId, groupId, isOwner) {
+  console.log(isOwner);
   $.ajax({
     type: 'delete',
     url: `/groups/${groupId}/users/${userId}`,
     complete: () => {
-      window.location.reload();
+      if (isOwner) {
+        window.location.reload();
+      } else {
+        window.location.href = '/groups';
+      }
     }
   });
 }

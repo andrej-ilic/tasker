@@ -11,13 +11,14 @@ class GroupSchema {
       CREATE TABLE IF NOT EXISTS groups (
         id           INTEGER   PRIMARY KEY   AUTOINCREMENT,
         name         TEXT      NOT NULL      DEFAULT '',
-        isPersonal   INTEGER   NOT NULL      DEFAULT 0
+        isPersonal   INTEGER   NOT NULL      DEFAULT 0,
+        ownerId      INTEGER
       )
     `, []);
   }
 
-  create(name, callback) {
-    this.db.run(`INSERT INTO groups(name) VALUES(?)`, [name], callback);
+  create(name, ownerId, callback) {
+    this.db.run(`INSERT INTO groups(name, ownerId) VALUES(?, ?)`, [name, ownerId], callback);
   }
 
   createPersonalGroup(name, callback) {

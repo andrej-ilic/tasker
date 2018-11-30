@@ -56,6 +56,11 @@ router.get('/:id', ensureAuthenticated, (req, res) => {
     }
     Task.getTasksByGroupId(groupId, tasks => {
       UserGroup.getUserIdsByGroupId(groupId, userIds => {
+        if (!userIds.map(user => user.userId).includes(req.user.id)) {
+          req.flash('error_msg', 'You are not a part of this group');
+          res.redirect('/groups');
+          return;
+        }
         userIds = userIds.map(userId => userId.userId);
         User.getUsersByIds(userIds, users => {
           tasks.forEach(task => {
@@ -68,8 +73,10 @@ router.get('/:id', ensureAuthenticated, (req, res) => {
           });
           users.forEach(user => {
             user.isAuthenticatedUser = user.id == req.user.id;
+            user.isOwner = user.id == group.ownerId;
           });
           res.render('groups/groupPage', {
+            viewerIsOwner: group.ownerId == req.user.id,
             tasks: tasks,
             group: group,
             users: users
@@ -85,7 +92,7 @@ router.post('/add', ensureAuthenticated, (req, res) => {
   let userId = req.user.id;
   let groupName = req.body.groupName;
 
-  Group.create(groupName, groupId => {
+  Group.create(groupName, userId, groupId => {
     UserGroup.create(userId, groupId, rowId => {
       res.redirect('/groups');
     });
