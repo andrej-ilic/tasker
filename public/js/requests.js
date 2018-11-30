@@ -1,5 +1,4 @@
 function finishTask(taskId) {
-  let url = window.location.href;
   $.ajax({
     type: 'put',
     url: `/tasks/${taskId}/finish`,
@@ -10,7 +9,6 @@ function finishTask(taskId) {
 }
 
 function undoTask(taskId) {
-  let url = window.location.href;
   $.ajax({
     type: 'put',
     url: `/tasks/${taskId}/undo`,
@@ -21,7 +19,6 @@ function undoTask(taskId) {
 }
 
 function deleteTask(taskId) {
-  let url = window.location.href;
   $.ajax({
     type: 'delete',
     url: `/tasks/${taskId}`,
@@ -37,7 +34,6 @@ function editTask(taskId) {
   let title = form.title.value.trim();
   let content = form.content.value.trim();
   let color = form.color.value ? form.color.value : '';
-  let url = window.location.href;
   $.ajax({
     type: 'put',
     url: `/tasks/${taskId}`,
@@ -50,7 +46,6 @@ function editTask(taskId) {
 
 function updateBio() {
   let biography = $('#biography').val().trim();
-  let url = window.location.href;
   $.ajax({
     type: 'put',
     url: '/users/bio',
@@ -63,7 +58,6 @@ function updateBio() {
 
 function deleteGroup(groupId) {
   let willDelete = confirm('Are you sure you want to delete this group?');
-  let url = window.location.href;
   if (willDelete) {
     $.ajax({
       type: 'delete',
@@ -75,4 +69,14 @@ function deleteGroup(groupId) {
   } else {
     return willDelete;
   }
+}
+
+function removeUserFromGroup(userId, groupId) {
+  $.ajax({
+    type: 'delete',
+    url: `/groups/${groupId}/users/${userId}`,
+    complete: () => {
+      window.location.reload();
+    }
+  });
 }

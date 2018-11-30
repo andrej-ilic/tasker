@@ -33,6 +33,10 @@ class UserGroupSchema {
   getRow(userId, groupId, callback) {
     this.db.get(`SELECT * FROM users_groups WHERE userId = ? AND groupId = ?`, [userId, groupId], callback);
   }
+
+  deleteRow(userId, groupId, callback) {
+    this.db.run(`DELETE FROM users_groups WHERE userId = ? AND groupId = ?`, [userId, groupId], callback);
+  }
 }
 
 module.exports = new UserGroupSchema();

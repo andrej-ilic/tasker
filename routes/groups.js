@@ -66,6 +66,9 @@ router.get('/:id', ensureAuthenticated, (req, res) => {
             task.isInfo = task.color == 'info';
             task.hasColor = task.isPrimary || task.isSuccess || task.isDanger || task.isWarning || task.isInfo;
           });
+          users.forEach(user => {
+            user.isAuthenticatedUser = user.id == req.user.id;
+          });
           res.render('groups/groupPage', {
             tasks: tasks,
             group: group,
@@ -132,6 +135,15 @@ router.post('/:id/add', ensureAuthenticated, (req, res) => {
   Task.create(title, content, color, groupId, taskId => {
     res.redirect(`/groups/${groupId}`);
   });
+});
+
+router.delete('/:id/users/:userId', ensureAuthenticated, (req, res) => {
+  let groupId = req.params.id;
+  let userId = req.params.userId;
+
+  UserGroup.deleteRow(userId, groupId, () => {
+    res.send('done');
+  })
 });
 
 module.exports = router;

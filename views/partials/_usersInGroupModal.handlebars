@@ -10,7 +10,15 @@
       <div class="modal-body">
         <div class="list-group">
           {{#each users}}
-          <a href="/users/{{id}}" class="list-group-item list-group-item-active">{{name}} <span class="font-weight-light">({{username}})</span></a>
+          <div class="list-group-item">
+            <a href="/users/{{id}}">{{name}} <span class="font-weight-light">({{username}})</span></a>
+            {{#if isAuthenticatedUser}}
+            {{else}}
+            <button type="button" class="close" onclick="removeUserFromGroup({{id}}, {{../group.id}})">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            {{/if}}
+          </div>
           {{/each}}
         </div>
       </div>
